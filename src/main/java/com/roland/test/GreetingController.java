@@ -8,9 +8,6 @@ import java.util.Map;
 @RestController
 public class GreetingController {
 
-    private static final String template = "Hello, %s!";
-    private static Map<Integer, Greeting> greetingList = new HashMap<>();
-
     @Autowired
     private GreetingService service;
 
@@ -23,15 +20,12 @@ public class GreetingController {
     }
 
     @GetMapping("/greeting/{id}")
-    public Greeting greetings(@PathVariable(value = "id") int id) {
-
-        return greetingList.get(id);
+    public Greeting greetings(@PathVariable(value = "id") String id) {
+        return service.retrieveById(id);
     }
 
     @PostMapping("/greeting")
     public void greetingAdd(@RequestBody Greeting greeting) {
-        greetingList.put(greeting.getId(), greeting);
-        System.out.println(greetingList.size());
         try {
             service.addGreeting(greeting);
         } catch (Exception e) {
@@ -41,7 +35,6 @@ public class GreetingController {
 
     @PutMapping("/greeting")
     public void greetingUpdate(@RequestBody Greeting greeting) {
-        greetingList.put(greeting.getId(), greeting);
         service.updateGreeting(greeting);
     }
 

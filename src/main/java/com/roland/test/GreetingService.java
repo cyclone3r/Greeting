@@ -56,6 +56,21 @@ public class GreetingService {
         return greetings;
     }
 
+    public Greeting retrieveById(String  id){
+        DocumentReference ref = retrieveDB().collection("Greeting").document(id);
+        ApiFuture<DocumentSnapshot> future = ref.get();
+        try {
+            DocumentSnapshot document = future.get();
+            return document.toObject(Greeting.class);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     public void deleteGreeting(String greetingId){
         System.out.println("Delete Greeting");
 
